@@ -712,9 +712,39 @@ ${analyticsTab === t ? "border-[#F5A623] text-[#F5A623] hover:bg-[#F5A623] hover
                   price: "₹2,999",
                 },
                 {
-                  name: "Leak Detection Sensor",
-                  desc: "AI-powered leak alerts.",
-                  price: "₹3,999",
+                  name: "Pressure Sensor PX-Industrial",
+                  desc: "Monitors hydraulic and pneumatic pressure systems.",
+                  price: "₹5,499",
+                },
+                {
+                  name: "Ultrasonic Leak Detector",
+                  desc: "Find compressed air & gas leaks instantly.",
+                  price: "₹6,999",
+                },
+                {
+                  name: "Oil Quality Sensor",
+                  desc: "Analyzes contamination & lubrication health in real-time.",
+                  price: "₹7,499",
+                },
+                {
+                  name: "Current Monitoring Sensor",
+                  desc: "Tracks electrical load & detects overload conditions.",
+                  price: "₹3,499",
+                },
+                {
+                  name: "Humidity Sensor Industrial",
+                  desc: "Prevents corrosion & moisture-related faults.",
+                  price: "₹1,999",
+                },
+                {
+                  name: "Proximity Sensor (Inductive)",
+                  desc: "Detects metal objects & positioning in automation lines.",
+                  price: "₹2,499",
+                },
+                {
+                  name: "Gas Detection Sensor",
+                  desc: "Detects hazardous gas leaks in factory environments.",
+                  price: "₹8,999",
                 },
               ].map((item, i) => (
                 <div
