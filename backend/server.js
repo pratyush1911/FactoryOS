@@ -5,7 +5,7 @@ const morgan = require("morgan");
 const aiRoutes = require("./routes/ai");
 const authRoutes = require("./routes/auth");
 const machineRoutes = require("./routes/machines");
-
+const pool = require("./db");
 
 const app = express();
 app.use(cors());
@@ -14,10 +14,7 @@ app.use("/ai", aiRoutes);
 app.use("/auth", authRoutes);
 app.use("/machines", machineRoutes);
 
-
 app.use(morgan("dev"));
-
-
 
 pool
   .connect()
