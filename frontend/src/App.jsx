@@ -19,6 +19,7 @@ export default function App() {
   const [error, setError] = useState("");
   const [closingAuth, setClosingAuth] = useState(false);
   const [exitingLanding, setExitingLanding] = useState(false);
+  const [selectedSensor, setSelectedSensor] = useState(null);
 
   /* ---------------- DATA ---------------- */
   const MACHINES_DATA = [
@@ -106,6 +107,16 @@ export default function App() {
       })
       .catch((err) => console.error(err));
   }, []);
+  useEffect(() => {
+  const handleEsc = (e) => {
+    if (e.key === "Escape") {
+      setSelectedSensor(null);
+    }
+  };
+  window.addEventListener("keydown", handleEsc);
+  return () => window.removeEventListener("keydown", handleEsc);
+}, []);
+
 
   const [alerts] = useState([
     {
@@ -693,77 +704,176 @@ ${analyticsTab === t ? "border-[#F5A623] text-[#F5A623] hover:bg-[#F5A623] hover
           </>
         )}
         {/* PRODUCTS */}
+        {/* PRODUCTS */}
         {section === "products" && (
           <>
             <h1 className="text-3xl font-bold mb-6">
               INDUSTRIAL <span className="text-[#F5A623]">SENSORS</span>
             </h1>
 
-            <div className="grid grid-cols-3 gap-6">
+            <div
+              className={`grid gap-6 transition-all duration-700 ease-in-out
+      ${selectedSensor ? "grid-cols-1" : "grid-cols-3"}`}
+            >
               {[
                 {
                   name: "Vibration Sensor Pro",
-                  desc: "Real-time vibration monitoring.",
+                  desc: "Advanced vibration analytics for rotating machinery.",
                   price: "₹4,999",
+                  full: "Monitors vibration frequencies to detect imbalance, shaft misalignment, bearing wear, and mechanical looseness before catastrophic failure occurs. Enables predictive maintenance scheduling.",
                 },
                 {
                   name: "Temperature Sensor X200",
-                  desc: "High-precision heat detection.",
+                  desc: "High-accuracy thermal monitoring.",
                   price: "₹2,999",
+                  full: "Tracks temperature fluctuations in motors, transformers, and hydraulic systems. Prevents overheating, improves energy efficiency, and reduces unexpected downtime.",
                 },
                 {
                   name: "Pressure Sensor PX-Industrial",
-                  desc: "Monitors hydraulic and pneumatic pressure systems.",
+                  desc: "Hydraulic & pneumatic pressure tracking.",
                   price: "₹5,499",
+                  full: "Monitors real-time pressure levels in compressed air and hydraulic lines. Detects drops, spikes, and instability in production systems.",
                 },
                 {
                   name: "Ultrasonic Leak Detector",
-                  desc: "Find compressed air & gas leaks instantly.",
+                  desc: "Instant compressed air leak detection.",
                   price: "₹6,999",
+                  full: "Detects ultrasonic sound waves produced by air and gas leaks. Reduces energy waste and improves compressor efficiency.",
                 },
                 {
                   name: "Oil Quality Sensor",
-                  desc: "Analyzes contamination & lubrication health in real-time.",
+                  desc: "Lubrication health analysis.",
                   price: "₹7,499",
+                  full: "Analyzes oil viscosity, contamination, and degradation levels in industrial gearboxes and engines. Extends equipment life cycle.",
                 },
                 {
                   name: "Current Monitoring Sensor",
-                  desc: "Tracks electrical load & detects overload conditions.",
+                  desc: "Electrical load monitoring.",
                   price: "₹3,499",
+                  full: "Tracks current draw to detect overload, imbalance, and motor stress conditions. Enhances power consumption optimization.",
                 },
                 {
                   name: "Humidity Sensor Industrial",
-                  desc: "Prevents corrosion & moisture-related faults.",
+                  desc: "Moisture and corrosion prevention.",
                   price: "₹1,999",
+                  full: "Monitors environmental humidity to prevent corrosion, mold formation, and moisture-related electronic failure.",
                 },
                 {
                   name: "Proximity Sensor (Inductive)",
-                  desc: "Detects metal objects & positioning in automation lines.",
+                  desc: "Metal object detection for automation.",
                   price: "₹2,499",
+                  full: "Detects metallic objects without contact. Used in conveyor lines, robotic arms, and automation positioning systems.",
                 },
                 {
                   name: "Gas Detection Sensor",
-                  desc: "Detects hazardous gas leaks in factory environments.",
+                  desc: "Hazardous gas monitoring.",
                   price: "₹8,999",
+                  full: "Detects methane, carbon monoxide, LPG, and other industrial gases. Ensures workplace safety compliance.",
                 },
-              ].map((item, i) => (
-                <div
-                  key={i}
-                  className="bg-[#131618] border border-[#1F2326] p-6 hover:border-[#F5A623] transition"
-                >
-                  <div className="text-white text-lg mb-2">{item.name}</div>
-                  <div className="text-gray-500 text-sm mb-4">{item.desc}</div>
-                  <div className="text-[#F5A623] font-bold mb-4">
-                    {item.price}
+                {
+                  name: "Flow Rate Sensor",
+                  desc: "Fluid and air flow monitoring.",
+                  price: "₹4,299",
+                  full: "Measures flow velocity of liquids and gases within pipelines. Prevents bottlenecks and system inefficiency.",
+                },
+                {
+                  name: "Thermal Imaging Sensor",
+                  desc: "Infrared heat signature detection.",
+                  price: "₹12,999",
+                  full: "Uses infrared technology to detect abnormal heat patterns across panels and machinery. Ideal for electrical inspections.",
+                },
+                {
+                  name: "Torque Monitoring Sensor",
+                  desc: "Shaft torque measurement.",
+                  price: "₹9,499",
+                  full: "Measures torque applied on rotating shafts. Prevents overload failure in motors and gear assemblies.",
+                },
+                {
+                  name: "Sound Level Sensor",
+                  desc: "Acoustic anomaly detection.",
+                  price: "₹3,899",
+                  full: "Monitors machine sound patterns to detect early-stage failure symptoms like grinding or friction.",
+                },
+                {
+                  name: "Vibration + Temperature Combo",
+                  desc: "Dual predictive analytics sensor.",
+                  price: "₹8,499",
+                  full: "Combines vibration and thermal data for advanced fault detection with AI-powered insights.",
+                },
+                {
+                  name: "Smart Edge IoT Hub",
+                  desc: "Central sensor integration module.",
+                  price: "₹14,999",
+                  full: "Aggregates multiple sensor data streams and pushes processed insights to FactoryOS dashboard in real time.",
+                },
+              ].map((item, i) => {
+                const isActive = selectedSensor?.name === item.name;
+
+                return (
+                  <div
+                    key={i}
+                    onClick={() =>
+                      setSelectedSensor(
+                        selectedSensor?.name === item.name ? null : item,
+                      )
+                    }
+                    className={`
+              relative cursor-pointer
+              transition-all duration-1000 ease-in-out
+              border border-[#1F2326]
+              ${
+                isActive
+                  ? "col-span-1 bg-[#131618] p-2 scale-100"
+                  : selectedSensor
+                    ? "scale-90 opacity-0 h-0 overflow-hidden"
+                    : "bg-[#131618] p-6 scale-100"
+              }
+            `}
+                  >
+                    <div className="text-white text-xl mb-3">{item.name}</div>
+
+                    {!isActive && (
+                      <>
+                        <div className="text-gray-500 text-sm mb-4">
+                          {item.desc}
+                        </div>
+                        <div className="text-[#F5A623] font-bold">
+                          {item.price}
+                        </div>
+                      </>
+                    )}
+
+                    {isActive && (
+                      <div className="animate-fadeIn">
+                        <div className="text-[#F5A623] font-bold mb-6">
+                          {item.price}
+                        </div>
+
+                        {/* IMAGE SPACE */}
+                        <div className="w-full h-72 bg-[#0D0F11] border border-[#1F2326] mb-6 flex items-center justify-center text-gray-600">
+                          Image Placeholder
+                        </div>
+
+                        <p className="text-gray-400 leading-relaxed mb-6">
+                          {item.full}
+                        </p>
+
+                        <button className="px-6 py-2 border border-[#F5A623] text-[#F5A623] hover:bg-[#F5A623] hover:text-black transition">
+                          Purchase →
+                        </button>
+
+                        <div className="mt-6 text-gray-500 text-sm">
+                          Contact: sales@factoryos.com
+                        </div>
+                      </div>
+                    )}
                   </div>
-                  <button className="px-4 py-2 border border-[#F5A623] text-[#F5A623] hover:bg-[#F5A623] hover:text-black transition">
-                    Buy Now
-                  </button>
-                </div>
-              ))}
+                );
+              })}
             </div>
           </>
         )}
+
         {/* CONTACT */}
         {section === "contact" && (
           <>
@@ -778,6 +888,21 @@ ${analyticsTab === t ? "border-[#F5A623] text-[#F5A623] hover:bg-[#F5A623] hover
                 For enterprise partnerships and bulk hardware orders.
               </div>
             </div>
+            <div className="bg-[#131618] border border-[#1F2326] p-6 mt-4 space-y-4">
+              <div className="text-gray-300">📧 pratyush120@gmail.com</div>
+              <div className="text-gray-300">📞 +91 9369724348</div>
+              <div className="text-gray-500 text-sm">
+                for technical inquiries, API access, or collaboration opportunities.
+              </div>
+            </div>
+            <div className="bg-[#131618] border border-[#1F2326] p-6 mt-4 space-y-4">
+              <div className="text-gray-300">📧 abhinay88@gmail.com</div>
+              <div className="text-gray-300">📞 +91 9238792733</div>
+              <div className="text-gray-500 text-sm">
+                For feedback, custom solutions, or just to say hi!
+              </div>
+            </div>
+            
           </>
         )}
       </div>
