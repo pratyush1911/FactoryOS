@@ -301,39 +301,39 @@ export default function App() {
 
     setLoading(false);
   }
-  async function handleRegister() {
-    setLoading(true);
-    setError("");
+  // async function handleRegister() {
+  //   setLoading(true);
+  //   setError("");
 
-    try {
-      const res = await fetch(
-        "https://factoryos-mxsq.onrender.com/auth/register",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ email, password }),
-        },
-      );
+  //   try {
+  //     const res = await fetch(
+  //       "https://factoryos-mxsq.onrender.com/auth/register",
+  //       {
+  //         method: "POST",
+  //         headers: {
+  //           "Content-Type": "application/json",
+  //         },
+  //         body: JSON.stringify({ email, password }),
+  //       },
+  //     );
 
-      const data = await res.json();
+  //     const data = await res.json();
 
-      if (!res.ok) {
-        setError(data.message || "Registration failed");
-        setLoading(false);
-        return;
-      }
+  //     if (!res.ok) {
+  //       setError(data.message || "Registration failed");
+  //       setLoading(false);
+  //       return;
+  //     }
 
-      alert("Account created successfully!");
-      setAuthMode("login"); // switch back to login mode
-    } catch (err) {
-      console.error("REGISTER ERROR:", err);
-      res.status(500).json({ message: err.message });
-    }
+  //     alert("Account created successfully!");
+  //     setAuthMode("login"); // switch back to login mode
+  //   } catch (err) {
+  //     console.error("REGISTER ERROR:", err);
+  //     res.status(500).json({ message: err.message });
+  //   }
 
-    setLoading(false);
-  }
+  //   setLoading(false);
+  // }
 
   /* ---------------- HELPERS ---------------- */
   const online = machines.filter((m) => m.status === "running").length;
@@ -447,21 +447,27 @@ export default function App() {
     /* ---------------- DASHBOARD ---------------- */
     <div className="bg-[#07090A] text-[#BEC4C9] min-h-screen flex">
       {/* SIDEBAR */}
-      <aside className="w-56 bg-[#0D0F11] border-r border-[#1F2326] p-6 flex flex-col">
+      <aside className="w-72 bg-[#0D0F11] border-r border-[#1F2326] p-6 flex flex-col shadow-xl">
         <div className="text-[#F5A623] text-xs mb-6">● SYSTEM ONLINE</div>
 
-        {["monitoring", "downtime", "predictive", "analytics", "ai"].map(
-          (s) => (
-            <div
-              key={s}
-              onClick={() => setSection(s)}
-              className={`px-3 py-2 cursor-pointer capitalize border-l-2
+        {[
+          "monitoring",
+          "downtime",
+          "predictive",
+          "analytics",
+          "ai",
+          "products",
+          "contact",
+        ].map((s) => (
+          <div
+            key={s}
+            onClick={() => setSection(s)}
+            className={`px-3 py-2 cursor-pointer capitalize border-l-2
 ${section === s ? "border-[#F5A623] text-[#F5A623] bg-[#F5A623]/10" : "border-transparent text-gray-500 hover:bg-[#F5A623]/5"}`}
-            >
-              {s}
-            </div>
-          ),
-        )}
+          >
+            {s}
+          </div>
+        ))}
         <div className="mt-auto text-xs text-gray-500 mb-4">{time}</div>
 
         <button
@@ -682,6 +688,64 @@ ${analyticsTab === t ? "border-[#F5A623] text-[#F5A623] hover:bg-[#F5A623] hover
               <div className="text-sm min-h-[80px] mt-4 whitespace-pre-wrap">
                 {aiOutput}
                 {typing && " ▊"}
+              </div>
+            </div>
+          </>
+        )}
+        {/* PRODUCTS */}
+        {section === "products" && (
+          <>
+            <h1 className="text-3xl font-bold mb-6">
+              INDUSTRIAL <span className="text-[#F5A623]">SENSORS</span>
+            </h1>
+
+            <div className="grid grid-cols-3 gap-6">
+              {[
+                {
+                  name: "Vibration Sensor Pro",
+                  desc: "Real-time vibration monitoring.",
+                  price: "₹4,999",
+                },
+                {
+                  name: "Temperature Sensor X200",
+                  desc: "High-precision heat detection.",
+                  price: "₹2,999",
+                },
+                {
+                  name: "Leak Detection Sensor",
+                  desc: "AI-powered leak alerts.",
+                  price: "₹3,999",
+                },
+              ].map((item, i) => (
+                <div
+                  key={i}
+                  className="bg-[#131618] border border-[#1F2326] p-6 hover:border-[#F5A623] transition"
+                >
+                  <div className="text-white text-lg mb-2">{item.name}</div>
+                  <div className="text-gray-500 text-sm mb-4">{item.desc}</div>
+                  <div className="text-[#F5A623] font-bold mb-4">
+                    {item.price}
+                  </div>
+                  <button className="px-4 py-2 border border-[#F5A623] text-[#F5A623] hover:bg-[#F5A623] hover:text-black transition">
+                    Buy Now
+                  </button>
+                </div>
+              ))}
+            </div>
+          </>
+        )}
+        {/* CONTACT */}
+        {section === "contact" && (
+          <>
+            <h1 className="text-3xl font-bold mb-6">
+              CONTACT <span className="text-[#F5A623]">FACTORYOS</span>
+            </h1>
+
+            <div className="bg-[#131618] border border-[#1F2326] p-6 space-y-4">
+              <div className="text-gray-300">📧 support@factoryos.com</div>
+              <div className="text-gray-300">📞 +91 98765 43210</div>
+              <div className="text-gray-500 text-sm">
+                For enterprise partnerships and bulk hardware orders.
               </div>
             </div>
           </>
