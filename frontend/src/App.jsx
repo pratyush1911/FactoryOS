@@ -328,7 +328,8 @@ export default function App() {
       alert("Account created successfully!");
       setAuthMode("login"); // switch back to login mode
     } catch (err) {
-      setError("Server error");
+      console.error("REGISTER ERROR:", err);
+      res.status(500).json({ message: err.message });
     }
 
     setLoading(false);
