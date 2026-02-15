@@ -2,7 +2,6 @@ require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
 const morgan = require("morgan");
-const { Pool } = require("pg");
 const aiRoutes = require("./routes/ai");
 const authRoutes = require("./routes/auth");
 const machineRoutes = require("./routes/machines");
@@ -18,9 +17,7 @@ app.use("/machines", machineRoutes);
 
 app.use(morgan("dev"));
 
-const pool = new Pool({
-  connectionString: process.env.DATABASE_URL,
-});
+
 
 pool
   .connect()
