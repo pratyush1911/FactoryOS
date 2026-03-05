@@ -3,7 +3,6 @@ import { useState, useEffect, useRef } from "react";
 import Login from "./components/login";
 
 export default function App() {
-  /* ---------------- LANDING STATE ---------------- */
   const [entered, setEntered] = useState(false);
   const [showRegister, setShowRegister] = useState(false);
   const [newMachine, setNewMachine] = useState({
@@ -14,14 +13,13 @@ export default function App() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [authMode, setAuthMode] = useState("login"); // login | register
+  const [authMode, setAuthMode] = useState("login");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [closingAuth, setClosingAuth] = useState(false);
   const [exitingLanding, setExitingLanding] = useState(false);
   const [selectedSensor, setSelectedSensor] = useState(null);
 
-  /* ---------------- DATA ---------------- */
   const MACHINES_DATA = [
     {
       id: "CNC-01",
@@ -108,15 +106,14 @@ export default function App() {
       .catch((err) => console.error(err));
   }, []);
   useEffect(() => {
-  const handleEsc = (e) => {
-    if (e.key === "Escape") {
-      setSelectedSensor(null);
-    }
-  };
-  window.addEventListener("keydown", handleEsc);
-  return () => window.removeEventListener("keydown", handleEsc);
-}, []);
-
+    const handleEsc = (e) => {
+      if (e.key === "Escape") {
+        setSelectedSensor(null);
+      }
+    };
+    window.addEventListener("keydown", handleEsc);
+    return () => window.removeEventListener("keydown", handleEsc);
+  }, []);
 
   const [alerts] = useState([
     {
@@ -370,6 +367,42 @@ export default function App() {
           uptime: 80,
         }),
       });
+      async function deleteMachine(id) {
+        try {
+          await fetch(`https://factoryos-mxsq.onrender.com/machines/${id}`, {
+            method: "DELETE",
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+          });
+
+          setMachines((prev) => prev.filter((m) => m.id !== id));
+        } catch (err) {
+          console.error("Delete failed", err);
+        }
+      }
+      async function updateMachine(id, status) {
+        try {
+          const res = await fetch(
+            `https://factoryos-mxsq.onrender.com/machines/${id}`,
+            {
+              method: "PATCH",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({ status }),
+            },
+          );
+
+          const data = await res.json();
+
+          setMachines((prev) =>
+            prev.map((m) => (m.id === id ? { ...m, status: data.status } : m)),
+          );
+        } catch (err) {
+          console.error(err);
+        }
+      }
 
       const data = await res.json();
       console.log("Inserted:", data);
@@ -520,6 +553,15 @@ ${section === s ? "border-[#F5A623] text-[#F5A623] bg-[#F5A623]/10" : "border-tr
                       <div className="text-white">{m.id}</div>
                       <div className="text-xs text-gray-500">{m.type}</div>
                       <div className="text-xs">OEE {Math.round(m.oee)}%</div>
+                    
+                      <button
+                        onClick={() => deleteMachine(m.id)}
+                        className="mt-2 px-3 py-1 text-xs border border-red-500 text-red-400 
+  hover:bg-red-500 hover:text-white hover:border-red-600 
+  transition-all duration-600 cursor-pointer rounded"
+                      >
+                        Delete
+                      </button>
                     </div>
                   ))}
                 </div>
@@ -703,7 +745,6 @@ ${analyticsTab === t ? "border-[#F5A623] text-[#F5A623] hover:bg-[#F5A623] hover
             </div>
           </>
         )}
-        {/* PRODUCTS */}
         {/* PRODUCTS */}
         {section === "products" && (
           <>
@@ -892,7 +933,8 @@ ${analyticsTab === t ? "border-[#F5A623] text-[#F5A623] hover:bg-[#F5A623] hover
               <div className="text-gray-300">📧 pratyush120@gmail.com</div>
               <div className="text-gray-300">📞 +91 9369724348</div>
               <div className="text-gray-500 text-sm">
-                for technical inquiries, API access, or collaboration opportunities.
+                for technical inquiries, API access, or collaboration
+                opportunities.
               </div>
             </div>
             <div className="bg-[#131618] border border-[#1F2326] p-6 mt-4 space-y-4">
@@ -902,7 +944,6 @@ ${analyticsTab === t ? "border-[#F5A623] text-[#F5A623] hover:bg-[#F5A623] hover
                 For feedback, custom solutions, or just to say hi!
               </div>
             </div>
-            
           </>
         )}
       </div>

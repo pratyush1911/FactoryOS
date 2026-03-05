@@ -7,10 +7,6 @@ exports.handleAI = async (req, res) => {
     return res.status(400).json({ reply: "No prompt provided." });
   }
 
-  if (!prompt) {
-    return res.status(400).json({ reply: "No prompt provided." });
-  }
-
   const lower = prompt.toLowerCase();
 
   try {
@@ -35,13 +31,11 @@ exports.handleAI = async (req, res) => {
 
     let reply = "";
 
-    // -------- STATUS QUERY --------
     if (lower.includes("status")) {
       reply = `${running} machines are currently running. ${
         machines.length - running
       } machines are not operational.`;
     }
-    // -------- UPTIME / OEE --------
     else if (
       lower.includes("uptime") ||
       lower.includes("oee") ||
@@ -49,11 +43,9 @@ exports.handleAI = async (req, res) => {
     ) {
       reply = `Average machine uptime is ${avgUptime}%. Improving availability by 5% would significantly increase overall OEE.`;
     }
-    // -------- MAINTENANCE / RISK --------
     else if (lower.match(/maint|repair|service|risk|failure/)) {
       reply = `Machine ${lowestMachine.name} has the lowest uptime (${lowestMachine.uptime}%). Preventive maintenance recommended immediately.`;
     }
-    // -------- DEFAULT ANALYSIS --------
     else {
       reply = `Factory analysis complete. ${running} units active. Average uptime is ${avgUptime}%. System operating within optimal parameters.`;
     }
